@@ -15,7 +15,6 @@
         crossorigin="anonymous"></script>
     <link href="assets/css/22880300.css" rel="stylesheet" />
     <script src="assets/js/logic.js"></script>
-    <script src="assets/js/view.js"></script>
     <script src="assets/js/storage.js"></script>
     <title>Create SVG File</title>
 </head>
@@ -104,6 +103,8 @@
 
 
 <script>
+    const svg = new SVG()
+
     const addShape = (type) => {
         let shape
         switch (type) {
@@ -386,8 +387,24 @@
 
     })
 
-
     exportSVGFile.addEventListener("click", () => {
-        console.log("hihi")
+        const svgData = svg.render()
+        fetch("/create", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ svgData, name: svg.name })
+        })
+            .then(response => response.json())
+            .then(data => {
+                alert("Đã Lưu Thành Công")
+                window.location.href = "/list.html"
+            })
+            .catch(error => {
+                alert("Có Lỗi Sảy Ra")
+                console.error('Error saving SVG:', error)
+            })
     })
+
 </script>

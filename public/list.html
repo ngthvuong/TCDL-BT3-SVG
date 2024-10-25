@@ -11,16 +11,13 @@
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
     <link href="assets/css/22880300.css" rel="stylesheet" />
-    <script src="assets/js/view.js"></script>
-    <script src="assets/js/logic.js"></script>
-    <script src="assets/js/storage.js"></script>
-    <title>Create SVG File</title>
+    <title>List SVG Files</title>
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary bg-dark border-body px-lg-5">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Navbar</a>
+            <a class="navbar-brand text-white" href="index.html">22880300</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -29,23 +26,43 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="index.html">Thêm Ảnh</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="list.html">Danh Sách Ảnh</a>
+                        <a class="nav-link text-white" aria-current="page" href="/">Tạo Ảnh</a>
                     </li>
                 </ul>
 
             </div>
         </div>
     </nav>
-
-
-    hihi
+    <div class="row container-fluid mx-4 my-2" id="listImages"></div>
 </body>
 
 </html>
 
 
 <script>
+    fetch("/images", {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            let renderHTML = ``
+            data.files.forEach(imageName => {
+                renderHTML += `
+                <div class="col-3 rows mt-2 border border-1">
+                    <img class="w-100" src="/data/${imageName}">
+                    <h4>${imageName}</h4>
+                </div>
+                `
+            });
+            document.getElementById("listImages").innerHTML = renderHTML
+            console.log(data)
+        })
+        .catch(error => {
+            alert("Có Lỗi Sảy Ra")
+            console.error('Error saving SVG:', error)
+        })
+
 </script>

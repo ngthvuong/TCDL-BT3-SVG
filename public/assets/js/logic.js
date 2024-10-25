@@ -194,10 +194,12 @@ class SVG {
         return svg
     }
     render = () => {
-        let svg = `<svg width="${this.width}" height="${this.height}">`
+        let svg = `<svg width="${this.width}" height="${this.height}" xmlns="http://www.w3.org/2000/svg" >`
         this.shapeList.forEach(shape => {
+            svg +="\n\t"
             svg += shape.render()
         })
+        svg +="\n"
         svg += `</svg>`
 
         return svg
@@ -262,9 +264,7 @@ class Rectangle extends Shape {
     }
 
     render = () => {
-        return `
-            <rect x="${this.ltp.x}" y="${this.ltp.y}" width="${this.width}" height="${this.height}" ${this.style.render()} />
-        `
+        return `<rect x="${this.ltp.x}" y="${this.ltp.y}" width="${this.width}" height="${this.height}" ${this.style.render()} />`
     }
 
     editorRender = () => {
@@ -333,9 +333,7 @@ class Circle extends Shape {
     }
 
     render = () => {
-        return `
-            <circle cx="${this.cp.x}" cy="${this.cp.y}" r="${this.r}" ${this.style.render()} />
-        `
+        return `<circle cx="${this.cp.x}" cy="${this.cp.y}" r="${this.r}" ${this.style.render()} />`
     }
 
     editorRender = () => {
@@ -402,9 +400,7 @@ class Ellipse extends Shape {
     }
 
     render = () => {
-        return `
-            <ellipse cx="${this.cp.x}" cy="${this.cp.y}" rx="${this.rx}" ry="${this.ry}" ${this.style.render()} />
-        `
+        return `<ellipse cx="${this.cp.x}" cy="${this.cp.y}" rx="${this.rx}" ry="${this.ry}" ${this.style.render()} />`
     }
 
     editorRender = () => {
@@ -533,9 +529,7 @@ class Line extends LineShape {
     }
 
     render = () => {
-        return `
-            <line x1="${this.p1.x}" y1="${this.p1.y}" x2="${this.p2.x}" y2="${this.p2.y}" ${this.style.render()} />
-        `
+        return `<line x1="${this.p1.x}" y1="${this.p1.y}" x2="${this.p2.x}" y2="${this.p2.y}" ${this.style.render()} />`
     }
 
     editorRender = () => {
@@ -701,9 +695,7 @@ class Polygon extends PolyShape {
     }
     render = () => {
         const pointsRender = this.points.map(value => { return `${value.x},${value.y}` }).join(" ")
-        return `
-            <polygon points="${pointsRender}" ${this.style.render()} />
-        `
+        return `<polygon points="${pointsRender}" ${this.style.render()} />`
     }
 }
 
@@ -718,9 +710,7 @@ class Polyline extends PolyShape {
     }
     render = () => {
         const pointsRender = this.points.map(value => { return `${value.x},${value.y}` }).join(" ")
-        return `
-            <polyline points="${pointsRender}" ${this.style.render()} />
-        `
+        return `<polyline points="${pointsRender}" ${this.style.render()} />`
     }
 }
 
@@ -790,9 +780,7 @@ class Text extends Shape {
         extendAttrButesRender += (this.rotate) ? `rotate="${this.rotate}"` : ``
         extendAttrButesRender += (this.wholeRotate) ? `transform="rotate(${this.wholeRotate} ${this.ltp.x},${this.ltp.y})"` : ``
 
-        return `
-            <text x="${this.ltp.x}" y="${this.ltp.y}" ${extendAttrButesRender} ${this.style.render()} >${this.text}</text>
-        `
+        return `<text x="${this.ltp.x}" y="${this.ltp.y}" ${extendAttrButesRender} ${this.style.render()} >${this.text}</text>`
     }
 
     editorRender = () => {
