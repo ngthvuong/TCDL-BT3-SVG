@@ -73,6 +73,7 @@ class SVG {
     width = 500
     height = 500
     activeShapeID = null
+    nameOrder = 1;
 
     setActiveShapeID = (shapeID) => {
         this.activeShapeID = parseInt(shapeID)
@@ -85,26 +86,49 @@ class SVG {
         this.height = values.height
     }
 
-    moveShapeFirst = (shapeID) => {
-
+    moveShapeForward = (shapeID) => {
+        shapeID = parseInt(shapeID)
+        if (shapeID < this.shapeList.length - 1) {
+            const shape = this.getShape(shapeID)
+            this.removeShape(shapeID)
+            this.shapeList.splice(shapeID + 1, 0, shape)
+        }
     }
 
-    moveShapeLast = (shapeID) => {
-
+    moveShapeBackward = (shapeID) => {
+        shapeID = parseInt(shapeID)
+        if (shapeID > 0) {
+            const shape = this.getShape(shapeID)
+            this.removeShape(shapeID)
+            this.shapeList.splice(shapeID - 1, 0, shape)
+        }
     }
-    moveShapeUp = (shapeID) => {
 
+    moveShapeFront = (shapeID) => {
+        shapeID = parseInt(shapeID)
+        if (shapeID < this.shapeList.length - 1) {
+            const shape = this.getShape(shapeID)
+            this.removeShape(shapeID)
+            this.shapeList.push(shape)
+        }
     }
 
-    moveShapeDown = (shapeID) => {
-
+    moveShapeBack = (shapeID) => {
+        shapeID = parseInt(shapeID)
+        if (shapeID > 0) {
+            const shape = this.getShape(shapeID)
+            this.removeShape(shapeID)
+            this.shapeList.unshift(shape)
+        }
     }
 
     removeShape = (shapeID) => {
-
+        shapeID = parseInt(shapeID)
+        this.shapeList.splice(shapeID, 1)
     }
 
     addShape = (shape) => {
+        shape.name += ` ${this.nameOrder++}`
         this.shapeList.push(shape)
         this.setActiveShapeID(this.shapeList.length - 1)
     }
@@ -113,7 +137,7 @@ class SVG {
         return this.shapeList[shapeID]
     }
 
-    editorRender = () => {
+    editorAttributesRender = () => {
         return `
         <div class="row fs-6 align-items-center">
             <label for="fileName" class="col-4 col-form-label">Tên File</label>
@@ -137,6 +161,24 @@ class SVG {
             <span class="col-3 col-form-label">px</span>
         </div>
         `
+    }
+
+    editorPointsRender = () => {
+        let pointsRender = ``
+        this.shapeList.forEach((shape, id) => {
+            let activeClass = (this.activeShapeID == id) ? "active" : ""
+            pointsRender += `
+            <div class="svgShapeItem d-flex mb-2 p-1 align-items-center border border-1 rounded g-1 ${activeClass}" id-data="${id}">
+                <span class="col-auto me-auto">${shape.name}</span>
+                <button class="btn btn-sm btn-danger ms-1 deleteShape" id-data="${id}"><i class="bi bi-trash"></i></button>
+                <button class="btn btn-sm btn-success ms-1 moveForwardShape" id-data="${id}"><i class="bi bi-chevron-down"></i></button>
+                <button class="btn btn-sm btn-success ms-1 moveBackwardShape" id-data="${id}"><i class="bi bi-chevron-up"></i></button>
+                <button class="btn btn-sm btn-primary ms-1 moveFrontShape" id-data="${id}"><i class="bi bi-chevron-double-down"></i></button>
+                <button class="btn btn-sm btn-primary ms-1 moveBackShape" id-data="${id}"><i class="bi bi-chevron-double-up"></i></button>
+            </div>
+        `
+        })
+        return pointsRender
     }
 
     visualRender = () => {
@@ -164,6 +206,7 @@ class SVG {
 }
 
 class Shape {
+    name = "Shape"
     style = new Style()
     constructor() {
         this.style.add("stroke", "#000")
@@ -182,6 +225,7 @@ class Shape {
 }
 
 class Rectangle extends Shape {
+    name = "Hình Chữ Nhật"
     ltp = new Point(20, 15)
     width = 40
     height = 30
@@ -255,6 +299,7 @@ class Rectangle extends Shape {
 }
 
 class Circle extends Shape {
+    name = "Hình Tròn"
     cp = new Point(20, 20)
     r = 20
 
@@ -319,10 +364,10 @@ class Circle extends Shape {
 }
 
 class Ellipse extends Shape {
+    name = "Hình Elip"
     cp = new Point(30, 30)
     rx = 30
     ry = 20
-
 
     constructor(cx = 30, cy = 30, rx = 30, ry = 20) {
         super()
@@ -417,6 +462,8 @@ class LineShape extends Shape {
 }
 
 class Line extends LineShape {
+    name = "Đường Thẳng"
+
     p1 = new Point(0, 0)
     p2 = new Point(30, 30)
 
@@ -644,6 +691,8 @@ class PolyShape extends LineShape {
     }
 }
 class Polygon extends PolyShape {
+    name = "Đa Giác"
+
     constructor(x1 = 30, y1 = 10, x2 = 50, y2 = 40, x3 = 10, y3 = 40) {
         super()
         this.addPoint(x1, y1)
@@ -659,6 +708,8 @@ class Polygon extends PolyShape {
 }
 
 class Polyline extends PolyShape {
+    name = "Đa Tuyến"
+
     constructor(x1 = 10, y1 = 40, x2 = 30, y2 = 10, x3 = 50, y3 = 40) {
         super()
         this.addPoint(x1, y1)
@@ -674,6 +725,8 @@ class Polyline extends PolyShape {
 }
 
 class Text extends Shape {
+    name = "Đoạn Văn"
+
     ltp = new Point(20, 15)
     text = "text here"
     fontSize = 13
@@ -723,7 +776,7 @@ class Text extends Shape {
             y: Math.min(Math.max(tempY, minHeight), maxHeight)
         }
 
-        if(this.wholeRotate){
+        if (this.wholeRotate) {
             changeAttriButes.transform = `rotate(${this.wholeRotate} ${changeAttriButes.x},${changeAttriButes.y})`
         }
 

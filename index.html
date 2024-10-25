@@ -71,34 +71,18 @@
     <div class="row mx-5">
         <div class="col-3 bg-info py-3 position-relative">
             <h5>Thông Tin</h5>
-            <button type="submit" class="btn btn-secondary position-absolute top-0 end-0 mt-2 me-3 no-outline ">
-                <i class="bi bi-save"></i>
+            <button type="button" id="exportSVGFile"
+                class="btn btn-success position-absolute top-0 end-0 mt-2 me-3 no-outline ">
+                <i class="bi bi-save">&nbsp;&nbsp;&nbsp;&nbsp;Xuất Tệp</i>
             </button>
             <form id="svgAttributes">
             </form>
 
             <h5 class="mt-3">Danh Sách Phần Tử</h5>
-            <div class="rows mx-3">
-                <div class="shape-item row mb-2 align-items-center border border-1 rounded">
-                    <span class="col-auto me-auto">Hình Vuông 1</span>
-                    <button class="btn btn-sm btn-success col-1 m-1 d-flex align-content-center"><i
-                            class="bi bi-arrow-up"></i></button>
-                    <button class="btn btn-sm btn-danger col-1 m-1 d-flex align-content-center"><i
-                            class="bi bi-arrow-down"></i></button>
-                </div>
-                <div class="shape-item row mb-2 align-items-center border border-1 rounded">
-                    <span class="col-auto me-auto">Hình Vuông 2</span>
-                    <button class="btn btn-sm btn-success col-1 m-1 d-flex align-content-center"><i
-                            class="bi bi-arrow-up"></i></button>
-                    <button class="btn btn-sm btn-danger col-1 m-1 d-flex align-content-center"><i
-                            class="bi bi-arrow-down"></i></button>
-                </div>
+            <div class="rows" id="svgShapes">
             </div>
-
-
         </div>
         <div class="col-7 py-3">
-            <h5>Hình Ảnh</h5>
             <div class="border border-1 " id="svgContainer">
                 <div class="bg-light" id="svgBox">
                 </div>
@@ -106,13 +90,8 @@
         </div>
         <div class="btn-light col-2 py-3 visually-hidden" id="itemEditorBox">
             <h5>Thuộc Tính Thành Phần</h5>
-
-            <form id="itemAttributesEditorBox">
-
-            </form>
-            <form id="itemStylesEditorBox">
-
-            </form>
+            <form id="itemAttributesEditorBox"></form>
+            <form id="itemStylesEditorBox"></form>
             <div class="row fs-6 mt-auto">
                 <button class="btn btn-sm btn-success mt-4 ms-auto" id="itemEditorBoxSave">Lưu</button>
             </div>
@@ -153,6 +132,7 @@
 
         svg.addShape(shape)
         svgBox.innerHTML = svg.visualRender()
+        svgShapes.innerHTML = svg.editorPointsRender()
 
         const mousedownEvent = new Event('mousedown', { bubbles: true })
         const mouseupEvent = new Event('mouseup', { bubbles: true })
@@ -163,21 +143,24 @@
     }
 
     const initApp = (svgAttributes, svgBox) => {
-        svgAttributes.innerHTML = svg.editorRender()
+
+        svgAttributes.innerHTML = svg.editorAttributesRender()
+        svgShapes.innerHTML = svg.editorPointsRender()
+
         svgBox.innerHTML = svg.visualRender()
     }
 
-    let svgAttributes = document.getElementById("svgAttributes")
-
     let svgContainer = document.getElementById("svgContainer")
-    let svgBox = document.getElementById("svgBox")
+    let svgAttributes = document.getElementById("svgAttributes")
+    let svgShapes = document.getElementById("svgShapes")
 
+    let svgBox = document.getElementById("svgBox")
 
     let itemEditorBox = document.getElementById("itemEditorBox")
     let itemAttributesEditorBox = document.getElementById("itemAttributesEditorBox")
     let itemStylesEditorBox = document.getElementById("itemStylesEditorBox")
     let itemEditorBoxSave = document.getElementById("itemEditorBoxSave")
-
+    let exportSVGFile = document.getElementById("exportSVGFile")
 
     initApp(svgAttributes, svgBox)
 
@@ -192,12 +175,79 @@
                     svgObj[key] = value
                 })
                 svg.updateValues(svgObj)
-
                 svgBox.innerHTML = svg.visualRender()
             }
         })
     })
+    svgShapes.addEventListener("click", (event) => {
+        const moveForwardShapeDom = event.target.closest(".moveForwardShape")
+        const moveBackwardShapeDom = event.target.closest(".moveBackwardShape")
+        const moveFrontShapeDom = event.target.closest(".moveFrontShape")
+        const moveBackShapeDom = event.target.closest(".moveBackShape")
+        const deleteShapeDom = event.target.closest(".deleteShape")
+        const shapeItem = event.target.closest(".svgShapeItem")
+        if (
+            !moveForwardShapeDom
+            && !moveBackwardShapeDom
+            && !moveFrontShapeDom
+            && !moveBackShapeDom
+            && !deleteShapeDom
+            && shapeItem
+        ) {
+            const shapeID = shapeItem.getAttribute("id-data")
 
+            const mousedownEvent = new Event('mousedown', { bubbles: true })
+            const mouseupEvent = new Event('mouseup', { bubbles: true })
+
+            const firstShape = svgBox.querySelector(`.visual_shape_item[id-data="${shapeID}"]`)
+            firstShape.dispatchEvent(mousedownEvent)
+            firstShape.dispatchEvent(mouseupEvent)
+        }
+
+        if (moveForwardShapeDom) {
+            const shapeID = moveForwardShapeDom.getAttribute("id-data")
+            svg.moveShapeForward(shapeID)
+            svgShapes.innerHTML = svg.editorPointsRender()
+            svgBox.innerHTML = svg.visualRender()
+        }
+        if (moveBackwardShapeDom) {
+            const shapeID = moveBackwardShapeDom.getAttribute("id-data")
+            svg.moveShapeBackward(shapeID)
+            svgShapes.innerHTML = svg.editorPointsRender()
+            svgBox.innerHTML = svg.visualRender()
+        }
+        if (moveFrontShapeDom) {
+            const shapeID = moveFrontShapeDom.getAttribute("id-data")
+            svg.moveShapeFront(shapeID)
+            svgShapes.innerHTML = svg.editorPointsRender()
+            svgBox.innerHTML = svg.visualRender()
+        }
+        if (moveBackShapeDom) {
+            const shapeID = moveBackShapeDom.getAttribute("id-data")
+            svg.moveShapeBack(shapeID)
+            svgShapes.innerHTML = svg.editorPointsRender()
+            svgBox.innerHTML = svg.visualRender()
+        }
+        if (deleteShapeDom) {
+            const shapeID = deleteShapeDom.getAttribute("id-data")
+            svg.removeShape(shapeID)
+            svgShapes.innerHTML = svg.editorPointsRender()
+            svgBox.innerHTML = svg.visualRender()
+
+            removeActiveShape()
+        }
+    })
+
+    const removeActiveShape = () => {
+        document.querySelectorAll("#svgBox .visual_shape_item").forEach((element) => {
+            element.classList.remove("active")
+        })
+        itemEditorBox.classList.add("visually-hidden")
+        itemEditorBox.removeAttribute("id-data")
+        itemAttributesEditorBox.innerHTML = ``
+        itemStylesEditorBox.innerHTML = ``
+        svg.setActiveShapeID(null)
+    }
     svgBox.addEventListener("mousedown", (event) => {
         const shapeItemDom = event.target.closest(".visual_shape_item")
         if (shapeItemDom) {
@@ -216,14 +266,10 @@
 
             itemAttributesEditorBox.innerHTML = shapeItem.editorRender()
             itemStylesEditorBox.innerHTML = shapeItem.style.editorRender()
+            svgShapes.innerHTML = svg.editorPointsRender()
+
         } else {
-            document.querySelectorAll("#svgBox .visual_shape_item").forEach((element) => {
-                element.classList.remove("active")
-            })
-            itemEditorBox.classList.add("visually-hidden")
-            itemEditorBox.removeAttribute("id-data")
-            itemAttributesEditorBox.innerHTML = ``
-            itemStylesEditorBox.innerHTML = ``
+            removeActiveShape()
         }
     })
 
@@ -340,4 +386,8 @@
 
     })
 
+
+    exportSVGFile.addEventListener("click", () => {
+        console.log("hihi")
+    })
 </script>
