@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css"
+        rel="stylesheet">
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <link href="assets/css/22880300.css" rel="stylesheet" />
+    <script src="assets/js/logic.js"></script>
+    <script src="assets/js/view.js"></script>
+    <script src="assets/js/storage.js"></script>
+    <title>Create SVG File</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary bg-dark border-body px-lg-5">
+        <div class="container-fluid">
+            <a class="navbar-brand text-white" href="index.html">22880300</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link text-white" aria-current="page" href="list.html">Danh Sách Ảnh</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" role="button" href="#" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Thêm Phần Tử
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <button class="dropdown-item" href="#" onclick="addShape('rect')">Hình Chữ Nhật</button>
+                            </li>
+                            <li>
+                                <button class="dropdown-item" href="#" onclick="addShape('circ')">Hình Tròn</button>
+                            </li>
+                            <li>
+                                <button class="dropdown-item" href="#" onclick="addShape('ellipse')">Hình ELip</button>
+                            </li>
+                            <li>
+                                <button class="dropdown-item" href="#" onclick="addShape('line')">Đường Thẳng</button>
+                            </li>
+                            <li>
+                                <button class="dropdown-item" href="#" onclick="addShape('polygon')">Đa Giác</button>
+                            </li>
+                            <li>
+                                <button class="dropdown-item" href="#" onclick="addShape('polyline')">Đa Tuyến</button>
+                            </li>
+                            <li>
+                                <button class="dropdown-item" href="#" onclick="addShape('text')">Chữ</button>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+    <div class="row mx-5">
+        <div class="col-3 bg-info py-3 position-relative">
+            <h5>Thông Tin</h5>
+            <button type="submit" class="btn btn-secondary position-absolute top-0 end-0 mt-2 me-3 no-outline ">
+                <i class="bi bi-save"></i>
+            </button>
+            <form id="svgAttributes">
+            </form>
+
+            <h5 class="mt-3">Danh Sách Phần Tử</h5>
+            <div class="rows mx-3">
+                <div class="shape-item row mb-2 align-items-center border border-1 rounded">
+                    <span class="col-auto me-auto">Hình Vuông 1</span>
+                    <button class="btn btn-sm btn-success col-1 m-1 d-flex align-content-center"><i
+                            class="bi bi-arrow-up"></i></button>
+                    <button class="btn btn-sm btn-danger col-1 m-1 d-flex align-content-center"><i
+                            class="bi bi-arrow-down"></i></button>
+                </div>
+                <div class="shape-item row mb-2 align-items-center border border-1 rounded">
+                    <span class="col-auto me-auto">Hình Vuông 2</span>
+                    <button class="btn btn-sm btn-success col-1 m-1 d-flex align-content-center"><i
+                            class="bi bi-arrow-up"></i></button>
+                    <button class="btn btn-sm btn-danger col-1 m-1 d-flex align-content-center"><i
+                            class="bi bi-arrow-down"></i></button>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="col-7 py-3">
+            <h5>Hình Ảnh</h5>
+            <div class="border border-1 " id="svgContainer">
+                <div class="bg-light" id="svgBox">
+                </div>
+            </div>
+        </div>
+        <div class="btn-light col-2 py-3 visually-hidden" id="itemEditorBox">
+            <h5>Thuộc Tính Thành Phần</h5>
+
+            <form id="itemAttributesEditorBox">
+
+            </form>
+            <form id="itemStylesEditorBox">
+
+            </form>
+            <div class="row fs-6 mt-auto">
+                <button class="btn btn-sm btn-success mt-4 ms-auto" id="itemEditorBoxSave">Lưu</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
+
+
+<script>
+    const addShape = (type) => {
+        let shape
+        switch (type) {
+            case 'rect':
+                shape = new Rectangle()
+                break
+            case 'circ':
+                shape = new Circle()
+                break
+            case 'ellipse':
+                shape = new Ellipse()
+                break
+            case 'line':
+                shape = new Line()
+                break
+            case 'polygon':
+                shape = new Polygon()
+                break
+            case 'polyline':
+                shape = new Polyline()
+                break
+            case 'text':
+                shape = new Text()
+                break
+        }
+
+        svg.addShape(shape)
+        svgBox.innerHTML = svg.visualRender()
+
+        const mousedownEvent = new Event('mousedown', { bubbles: true })
+        const mouseupEvent = new Event('mouseup', { bubbles: true })
+
+        const firstShape = svgBox.querySelector(".visual_shape_item.active")
+        firstShape.dispatchEvent(mousedownEvent)
+        firstShape.dispatchEvent(mouseupEvent)
+    }
+
+    const initApp = (svgAttributes, svgBox) => {
+        svgAttributes.innerHTML = svg.editorRender()
+        svgBox.innerHTML = svg.visualRender()
+    }
+
+    let svgAttributes = document.getElementById("svgAttributes")
+
+    let svgContainer = document.getElementById("svgContainer")
+    let svgBox = document.getElementById("svgBox")
+
+
+    let itemEditorBox = document.getElementById("itemEditorBox")
+    let itemAttributesEditorBox = document.getElementById("itemAttributesEditorBox")
+    let itemStylesEditorBox = document.getElementById("itemStylesEditorBox")
+    let itemEditorBoxSave = document.getElementById("itemEditorBoxSave")
+
+
+    initApp(svgAttributes, svgBox)
+
+    document.querySelectorAll("#svgAttributes input").forEach(element => {
+        element.addEventListener("keypress", function (event) {
+            if (event.key === "Enter") {
+                event.preventDefault()
+
+                const svgFormData = new FormData(svgAttributes)
+                const svgObj = {}
+                svgFormData.forEach((value, key) => {
+                    svgObj[key] = value
+                })
+                svg.updateValues(svgObj)
+
+                svgBox.innerHTML = svg.visualRender()
+            }
+        })
+    })
+
+    svgBox.addEventListener("mousedown", (event) => {
+        const shapeItemDom = event.target.closest(".visual_shape_item")
+        if (shapeItemDom) {
+            document.querySelectorAll("#svgBox .visual_shape_item").forEach((element) => {
+                element.classList.remove("active")
+            })
+            shapeItemDom.classList.add("active")
+
+            let itemID = shapeItemDom.getAttribute("id-data")
+
+            svg.setActiveShapeID(itemID)
+            const shapeItem = svg.getShape(itemID)
+
+            itemEditorBox.classList.remove("visually-hidden")
+            itemEditorBox.setAttribute("id-data", itemID)
+
+            itemAttributesEditorBox.innerHTML = shapeItem.editorRender()
+            itemStylesEditorBox.innerHTML = shapeItem.style.editorRender()
+        } else {
+            document.querySelectorAll("#svgBox .visual_shape_item").forEach((element) => {
+                element.classList.remove("active")
+            })
+            itemEditorBox.classList.add("visually-hidden")
+            itemEditorBox.removeAttribute("id-data")
+            itemAttributesEditorBox.innerHTML = ``
+            itemStylesEditorBox.innerHTML = ``
+        }
+    })
+
+    let isDragging = false
+    let originClientX, originClientY = null
+    let shapeItemDom, shapeItemObj = null;
+    const handleMouseDropEvent = (event) => {
+        if (isDragging) {
+            isDragging = false
+
+            if (shapeItemObj && shapeItemDom) {
+                const dataObj = {}
+                Array.from(shapeItemDom.attributes).forEach(attr => {
+                    dataObj[attr.name] = attr.value
+                });
+
+                shapeItemObj.updateValuesFromDom(dataObj)
+
+                itemAttributesEditorBox.innerHTML = shapeItemObj.editorRender()
+                itemStylesEditorBox.innerHTML = shapeItemObj.style.editorRender()
+
+                originClientX, originClientY = null
+                shapeItemDom, shapeItemObj = null;
+            }
+        }
+    }
+
+    svgBox.addEventListener("mousedown", (event) => {
+        if (event.target.closest(".visual_shape_item")) {
+            if (!isDragging) {
+                originClientX = event.clientX
+                originClientY = event.clientY
+
+                shapeItemDom = event.target.closest(".visual_shape_item").querySelector("rect, circle, ellipse, line, polygon, polyline, text")
+                shapeItemObj = svg.getShape(shapeItemDom.parentNode.getAttribute("id-data"))
+            }
+            isDragging = true
+        }
+    })
+    svgBox.addEventListener("mousemove", (event) => {
+        if (isDragging && shapeItemDom && shapeItemObj) {
+
+            let deltaX = event.clientX - originClientX
+            let deltaY = event.clientY - originClientY
+
+            let updateAttrObj = shapeItemObj.calMoveAttributes(svg, deltaX, deltaY)
+
+            Object.entries(updateAttrObj).map(([name, value]) => {
+                shapeItemDom.setAttribute(name, value)
+            })
+        }
+    })
+    svgBox.addEventListener("mouseup", handleMouseDropEvent)
+    svgBox.addEventListener("mouseleave", handleMouseDropEvent)
+
+    itemEditorBox.addEventListener("keypress", function (event) {
+        if (event.key === "Enter" && event.target.closest("input")) {
+            itemEditorBoxSave.click()
+        }
+    })
+    itemEditorBox.addEventListener("click", (event) => {
+        if (event.target.closest(".addMorePoint")) {
+            const pointsItemList = itemEditorBox.querySelector("#pointsItemList")
+            if (pointsItemList) {
+                const shapeItem = svg.getShape(itemEditorBox.getAttribute("id-data"))
+                const id = itemEditorBox.querySelectorAll(".pointItem").length
+                let newNode = shapeItem.editorPointRender(id)
+                pointsItemList.innerHTML = pointsItemList.innerHTML + newNode
+            }
+        }
+    })
+    itemEditorBox.addEventListener("click", (event) => {
+        deletePointButton = event.target.closest(".deletePointItem")
+        if (deletePointButton) {
+            const pointsItemList = itemEditorBox.querySelector("#pointsItemList")
+            const pointID = deletePointButton.getAttribute("id-data")
+            if (pointsItemList && pointID) {
+                const shapeItem = svg.getShape(itemEditorBox.getAttribute("id-data"))
+                shapeItem.removePoint(pointID)
+                deletePointButton.closest(".pointItem").remove()
+            }
+        }
+    })
+    itemEditorBoxSave.addEventListener("click", () => {
+        let itemID = itemEditorBox.getAttribute("id-data")
+        const shapeItem = svg.getShape(itemID)
+
+        const attrFormData = new FormData(itemAttributesEditorBox)
+        const attrObject = {}
+        attrFormData.forEach((value, key) => {
+            if (/.*\[\]$/.test(key)) {
+                let baseKey = key.replace(/\[\]$/, "")
+                if (!attrObject[baseKey]) {
+                    attrObject[baseKey] = []
+                }
+                attrObject[baseKey].push(value)
+            } else {
+                attrObject[key] = value
+            }
+        })
+        shapeItem.updateValues(attrObject)
+
+        const styleFormData = new FormData(itemStylesEditorBox)
+        const styleObject = {}
+        styleFormData.forEach((value, key) => {
+            styleObject[key] = value
+        })
+        shapeItem.style.updateValues(styleObject)
+
+        svgBox.innerHTML = svg.visualRender()
+
+        itemAttributesEditorBox.innerHTML = shapeItem.editorRender()
+        itemStylesEditorBox.innerHTML = shapeItem.style.editorRender()
+
+    })
+
+</script>

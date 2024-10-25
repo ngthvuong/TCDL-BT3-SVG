@@ -1,0 +1,23 @@
+.no-outline:focus {
+    outline: none;
+    box-shadow: none;
+}
+.shape-item {
+    cursor: pointer;
+}
+#svgContainer{
+    overflow-x: auto;
+    padding: 0;
+
+}
+
+.visual_shape_item.active {
+    outline: 2px solid #636262; 
+    outline-offset: 2px;
+}
+
+#svgBox {
+    display: inline-block;
+    padding: 0;
+    overflow: hidden;
+}
