@@ -204,7 +204,6 @@ class SVG {
 
         return svg
     }
-
 }
 
 class Shape {
@@ -776,9 +775,9 @@ class Text extends Shape {
     render = () => {
 
         let extendAttrButesRender = ``
-        extendAttrButesRender += (this.fontSize) ? `font-size="${this.fontSize}"` : ``
-        extendAttrButesRender += (this.rotate) ? `rotate="${this.rotate}"` : ``
-        extendAttrButesRender += (this.wholeRotate) ? `transform="rotate(${this.wholeRotate} ${this.ltp.x},${this.ltp.y})"` : ``
+        extendAttrButesRender += (this.fontSize) ? ` font-size="${this.fontSize}"` : ``
+        extendAttrButesRender += (this.rotate) ? ` rotate="${this.rotate}"` : ``
+        extendAttrButesRender += (this.wholeRotate) ? ` transform="rotate(${this.wholeRotate} ${this.ltp.x},${this.ltp.y})"` : ``
 
         return `<text x="${this.ltp.x}" y="${this.ltp.y}" ${extendAttrButesRender} ${this.style.render()} >${this.text}</text>`
     }

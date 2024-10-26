@@ -1,0 +1,9 @@
+<svg width="500" height="500" xmlns="http://www.w3.org/2000/svg" >
+	<rect x="176" y="171" width="122" height="111" stroke="#00f" fill="#ff0" stroke-width="6" />
+	<circle cx="123" cy="222" r="50" stroke="#000" fill="#fff" stroke-width="5" />
+	<ellipse cx="120" cy="284" rx="33" ry="44" stroke="#333" fill="#ff3" stroke-width="4" />
+	<line x1="100" y1="100" x2="200" y2="200" stroke="#00f" fill="#ff2" stroke-width="3" />
+	<polygon points="352,133 372,163 332,12 123,21" stroke="#EEE" fill="#ff3" stroke-width="2" />
+	<polyline points="10,40 30,10 234,324" stroke="#000" fill="none" stroke-width="2" />
+	<text x="332" y="325" font-size="44" rotate="33" transform="rotate(90 332,325)" stroke="#00f" fill="#f00" stroke-width="1" >hihi</text>
+</svg>
